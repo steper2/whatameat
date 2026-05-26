@@ -417,44 +417,85 @@
       background: var(--surface2);
     }
 
-    /* ── FOOD IMAGES ── */
-    .result-hero {
-      width: 100%;
-      height: 190px;
-      border-radius: 14px;
-      overflow: hidden;
-      margin-bottom: 18px;
-      position: relative;
+    /* ── WEATHER PANEL ── */
+    .weather-btn {
       background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s, transform 0.1s;
     }
-    .result-hero img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: opacity 0.4s;
+    .weather-btn:hover { background: var(--border); transform: scale(1.04); }
+    .weather-btn.active { border-color: var(--cook); color: var(--cook); }
+    .weather-panel {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.45s ease, padding 0.3s;
+      padding: 0 28px;
     }
-    .result-hero .hero-overlay {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 10px 14px;
-      background: linear-gradient(transparent, rgba(0,0,0,0.7));
-      color: #fff;
+    .weather-panel.open {
+      max-height: 700px;
+      padding: 24px 28px;
+    }
+    .weather-loading {
+      text-align: center;
+      padding: 20px;
+      color: var(--text-sub);
+      font-size: 0.9rem;
+    }
+    .weather-main {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+    .weather-icon-big { font-size: 3.6rem; line-height: 1; }
+    .weather-temp-num {
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .weather-desc { font-size: 1rem; color: var(--text-sub); margin-top: 4px; }
+    .weather-location { font-size: 0.78rem; color: var(--text-sub); margin-top: 3px; }
+    .weather-rec-title {
       font-size: 0.82rem;
       font-weight: 700;
-      letter-spacing: 0.3px;
+      color: var(--text-sub);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    .recipe-img {
-      width: 100%;
-      height: 150px;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 14px;
-      background: var(--surface);
+    .weather-food-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 4px;
     }
-    .recipe-img img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
+    .weather-food-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      transition: transform 0.15s;
+    }
+    .weather-food-card:hover { transform: translateY(-2px); }
+    .weather-food-name { font-size: 1rem; font-weight: 900; }
+    .weather-food-reason { font-size: 0.75rem; color: var(--text-sub); margin-top: 4px; line-height: 1.45; }
+    .weather-error {
+      text-align: center;
+      padding: 16px;
+      color: var(--text-sub);
+      font-size: 0.85rem;
+      line-height: 1.6;
     }
 
     /* ── SCROLLBAR ── */
@@ -467,11 +508,23 @@
 
 <header>
   <div class="app-title"><span>시발</span> 뭐먹지 🍽️</div>
-  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
-    <span id="themeIcon">☀️</span>
-    <span id="themeLabel">라이트 모드</span>
-  </button>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="weather-btn" id="weatherBtn" onclick="toggleWeather()">
+      <span id="weatherBtnIcon">🌤️</span>
+      <span id="weatherBtnLabel">오늘 날씨</span>
+    </button>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
+      <span id="themeIcon">☀️</span>
+      <span id="themeLabel">라이트 모드</span>
+    </button>
+  </div>
 </header>
+
+<div class="weather-panel" id="weatherPanel">
+  <div id="weatherContent">
+    <div class="weather-loading">📍 위치를 확인하고 있어요...</div>
+  </div>
+</div>
 
 <main>
   <p class="subtitle">
@@ -566,12 +619,73 @@ const CATEGORIES = ['한식', '일식', '중식', '양식', '분식'];
 
 const EMOJI_MAP = { '한식':'🍚', '일식':'🍣', '중식':'🥡', '양식':'🍝', '분식':'🥕' };
 
-const FOOD_IMAGES = {
-  '한식': 'https://images.unsplash.com/photo-1583623025817-d180a2221d0a?w=700&h=300&fit=crop&auto=format&q=80',
-  '일식': 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=700&h=300&fit=crop&auto=format&q=80',
-  '중식': 'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=700&h=300&fit=crop&auto=format&q=80',
-  '양식': 'https://images.unsplash.com/photo-1565299624946-b28f40a04680?w=700&h=300&fit=crop&auto=format&q=80',
-  '분식': 'https://images.unsplash.com/photo-1635363638580-c2809d049eee?w=700&h=300&fit=crop&auto=format&q=80',
+const WEATHER_RECOMMEND = {
+  sunny_hot: {
+    label: '☀️ 무더운 날씨',
+    desc: '이 더위엔 시원하게 먹어야지!',
+    foods: [
+      { name: '냉면', emoji: '🍜', reason: '시원한 육수로 더위를 날려버려요' },
+      { name: '냉우동', emoji: '🍝', reason: '탱탱한 면발에 차가운 국물 조합' },
+      { name: '콩국수', emoji: '🍜', reason: '고소하고 시원한 여름 별미' },
+      { name: '삼계탕', emoji: '🍲', reason: '이열치열! 여름 보양식' },
+      { name: '빙수', emoji: '🍧', reason: '달달하고 시원한 디저트로 마무리' },
+    ]
+  },
+  sunny_mild: {
+    label: '🌤️ 맑고 쾌적한 날씨',
+    desc: '나들이 가기 딱 좋은 날씨!',
+    foods: [
+      { name: '초밥', emoji: '🍣', reason: '맑은 날엔 깔끔한 초밥이 최고' },
+      { name: '피자', emoji: '🍕', reason: '친구들과 피자 파티 어때요?' },
+      { name: '돈까스', emoji: '🍱', reason: '바삭한 돈까스로 에너지 충전' },
+      { name: '김밥', emoji: '🌯', reason: '소풍 가고 싶은 날씨엔 김밥' },
+      { name: '파스타', emoji: '🍝', reason: '여유로운 날에 홈메이드 파스타' },
+    ]
+  },
+  cloudy: {
+    label: '☁️ 흐린 날씨',
+    desc: '흐린 날엔 든든하게 먹자',
+    foods: [
+      { name: '치킨', emoji: '🍗', reason: '흐린 날 치맥은 국룰이죠' },
+      { name: '짜장면', emoji: '🍝', reason: '짜장면 배달 각!' },
+      { name: '부대찌개', emoji: '🍲', reason: '따뜻한 부대찌개로 든든하게' },
+      { name: '돼지갈비', emoji: '🥩', reason: '굵직한 한 끼로 기분 전환' },
+      { name: '라면', emoji: '🍜', reason: '간단하지만 확실한 위로' },
+    ]
+  },
+  rainy: {
+    label: '🌧️ 비 오는 날',
+    desc: '비 오는 날엔 이걸 먹어야지!',
+    foods: [
+      { name: '파전', emoji: '🥞', reason: '빗소리 들으며 파전·막걸리 진리' },
+      { name: '칼국수', emoji: '🍜', reason: '뜨끈한 칼국수 한 그릇이 딱' },
+      { name: '순두부찌개', emoji: '🍲', reason: '빗속에 따뜻한 순두부는 행복' },
+      { name: '라멘', emoji: '🍜', reason: '비 오는 날 라멘으로 몸 녹이기' },
+      { name: '삼겹살', emoji: '🥩', reason: '빗소리 안주 삼아 삼겹살 파티' },
+    ]
+  },
+  snowy: {
+    label: '❄️ 눈 오는 날',
+    desc: '눈 구경하며 따뜻하게 먹자',
+    foods: [
+      { name: '어묵탕', emoji: '🫕', reason: '눈 오는 날 길거리 어묵 생각나!' },
+      { name: '국물 떡볶이', emoji: '🌶️', reason: '매콤달콤 따뜻한 떡볶이 국물' },
+      { name: '설렁탕', emoji: '🍲', reason: '뼈 국물로 몸 속부터 따뜻하게' },
+      { name: '라면', emoji: '🍜', reason: '눈 내리는 창가에서 라면 한 봉지' },
+      { name: '전골', emoji: '🫕', reason: '가족·친구들과 둘러앉아 전골' },
+    ]
+  },
+  cold: {
+    label: '🥶 추운 날씨',
+    desc: '따뜻한 거 먹고 힘내자!',
+    foods: [
+      { name: '삼계탕', emoji: '🍲', reason: '추위엔 보양식으로 체력 보충' },
+      { name: '해장국', emoji: '🍲', reason: '얼어붙은 몸을 녹여줄 뜨끈한 국' },
+      { name: '곱창전골', emoji: '🫕', reason: '칼바람엔 진한 전골이 정답' },
+      { name: '짬뽕', emoji: '🍜', reason: '얼큰한 짬뽕 국물로 온몸이 따뜻해' },
+      { name: '핫초코', emoji: '☕', reason: '달달하고 따뜻한 마무리' },
+    ]
+  },
 };
 
 const DELIVERY = {
@@ -600,120 +714,70 @@ const DELIVERY = {
 const RECIPES = {
   '한식': [
     {
-      name: '백종원의 제육볶음',
-      chef: '백종원',
-      rating: 4.9,
-      icon: '🥩',
-      image: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=520&h=200&fit=crop&auto=format&q=80',
-      time: '30분',
-      difficulty: '쉬움',
+      name: '백종원의 제육볶음', chef: '백종원', rating: 4.9, icon: '🥩',
+      time: '30분', difficulty: '쉬움',
       ingredients: ['돼지 앞다리살 400g', '고추장 3T', '간장 2T', '설탕 1T', '참기름 1T', '다진마늘 1T', '양파', '대파'],
       steps: ['돼지고기 먹기 좋게 썬다', '양념 재료 모두 섞어 고기에 30분 재운다', '달군 팬에 양파 먼저 볶는다', '재운 고기를 강불에 볶는다', '대파·깨 넣고 마무리']
     },
     {
-      name: '백종원의 된장찌개',
-      chef: '백종원',
-      rating: 4.8,
-      icon: '🍲',
-      image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=520&h=200&fit=crop&auto=format&q=80',
-      time: '20분',
-      difficulty: '쉬움',
+      name: '백종원의 된장찌개', chef: '백종원', rating: 4.8, icon: '🍲',
+      time: '20분', difficulty: '쉬움',
       ingredients: ['된장 2T', '두부 1/2모', '호박 1/4개', '버섯', '멸치육수 2컵', '다진마늘 1t'],
       steps: ['멸치로 육수를 낸다', '육수에 된장을 잘 풀어 넣는다', '두부·호박 넣고 끓인다', '버섯·마늘 넣고 한소끔 끓인다', '파를 올리고 마무리']
     }
   ],
   '일식': [
     {
-      name: 'Nobu 미소 블랙 코드 피시',
-      chef: 'Nobu Matsuhisa ⭐ 미슐랭',
-      rating: 4.9,
-      icon: '🐟',
-      image: 'https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=520&h=200&fit=crop&auto=format&q=80',
-      time: '2일',
-      difficulty: '어려움',
+      name: 'Nobu 미소 블랙 코드 피시', chef: 'Nobu Matsuhisa ⭐ 미슐랭', rating: 4.9, icon: '🐟',
+      time: '2일', difficulty: '어려움',
       ingredients: ['은대구 4조각', '백미소 3T', '미림 2T', '사케 2T', '설탕 1T'],
       steps: ['미소·미림·사케·설탕으로 마리네이드 만들기', '생선을 마리네이드에 48시간 재운다', '여분의 미소를 깨끗이 닦아낸다', '브로일러에서 황금빛 될 때까지 굽는다', '오븐 200°C에서 8분 마저 익힌다']
     },
     {
-      name: '정통 도쿄식 쇼유 라멘',
-      chef: 'Ivan Orkin (뉴욕타임즈 선정 라멘 장인)',
-      rating: 4.8,
-      icon: '🍜',
-      image: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=520&h=200&fit=crop&auto=format&q=80',
-      time: '3시간',
-      difficulty: '보통',
+      name: '정통 도쿄식 쇼유 라멘', chef: 'Ivan Orkin (뉴욕타임즈 선정 라멘 장인)', rating: 4.8, icon: '🍜',
+      time: '3시간', difficulty: '보통',
       ingredients: ['돼지뼈 1kg', '닭 뼈대', '간장 1/2컵', '미림 3T', '라멘면 2인분', '차슈', '반숙 달걀 2개', '파 1줄기', '나루토'],
       steps: ['돼지뼈·닭뼈로 진한 육수 3시간 끓이기', '간장·미림으로 타레(양념장) 만들기', '차슈 포크 조린 뒤 얇게 슬라이스', '달걀 반숙 후 간장 소스에 재우기', '면 삶고 육수 + 타레 + 토핑 올려 완성']
     }
   ],
   '중식': [
     {
-      name: '이연복의 짜장면',
-      chef: '이연복 (목란 오너 셰프)',
-      rating: 4.9,
-      icon: '🍝',
-      image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=520&h=200&fit=crop&auto=format&q=80',
-      time: '40분',
-      difficulty: '보통',
+      name: '이연복의 짜장면', chef: '이연복 (목란 오너 셰프)', rating: 4.9, icon: '🍝',
+      time: '40분', difficulty: '보통',
       ingredients: ['중면 2인분', '춘장 4T', '돼지고기 200g', '양파 2개', '감자 1개', '캐러멜 설탕 1T', '굴소스 1T', '전분물'],
       steps: ['양파·감자 깍둑 썰기', '돼지고기 볶다가 채소 추가', '춘장 넣고 캐러멜라이즈 처리', '물 넣고 10분 끓이기', '전분물로 농도 맞추고 면 위에 올리기']
     },
     {
-      name: '이연복의 마파두부',
-      chef: '이연복 (목란 오너 셰프)',
-      rating: 4.8,
-      icon: '🫕',
-      image: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=520&h=200&fit=crop&auto=format&q=80',
-      time: '25분',
-      difficulty: '쉬움',
+      name: '이연복의 마파두부', chef: '이연복 (목란 오너 셰프)', rating: 4.8, icon: '🫕',
+      time: '25분', difficulty: '쉬움',
       ingredients: ['두부 1모', '다진 돼지고기 150g', '두반장 2T', '간장 1T', '고추기름', '다진마늘', '화자오', '전분물'],
       steps: ['두부 2cm로 썰어 소금물에 데친다', '고추기름에 마늘·두반장을 볶는다', '돼지고기 넣고 볶는다', '육수 붓고 두부 넣어 끓인다', '전분물로 농도 맞추고 화자오 뿌리기']
     }
   ],
   '양식': [
     {
-      name: '고든 램지의 퍼펙트 스테이크',
-      chef: 'Gordon Ramsay ⭐ 미슐랭 7스타',
-      rating: 4.9,
-      icon: '🥩',
-      image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=520&h=200&fit=crop&auto=format&q=80',
-      time: '20분',
-      difficulty: '보통',
+      name: '고든 램지의 퍼펙트 스테이크', chef: 'Gordon Ramsay ⭐ 미슐랭 7스타', rating: 4.9, icon: '🥩',
+      time: '20분', difficulty: '보통',
       ingredients: ['립아이 300g', '버터 2T', '마늘 3쪽', '로즈마리 2줄기', '타임 2줄기', '소금', '후추', '올리브오일'],
       steps: ['상온에 30분 꺼내두고 소금·후추로 간', '달군 주철 팬에 올리브오일', '강불에서 2분씩 앞뒤 굽기', '버터·마늘·허브 넣고 배스팅', '10분 레스팅 후 썰어서 완성']
     },
     {
-      name: '고든 램지의 카르보나라',
-      chef: 'Gordon Ramsay ⭐ 미슐랭 7스타',
-      rating: 4.8,
-      icon: '🍝',
-      image: 'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?w=520&h=200&fit=crop&auto=format&q=80',
-      time: '25분',
-      difficulty: '쉬움',
+      name: '고든 램지의 카르보나라', chef: 'Gordon Ramsay ⭐ 미슐랭 7스타', rating: 4.8, icon: '🍝',
+      time: '25분', difficulty: '쉬움',
       ingredients: ['스파게티 200g', '판체타 100g', '달걀 2개 + 노른자 2개', '파르미지아노 50g', '마늘 2쪽', '후추'],
       steps: ['소금물에 파스타 알덴테로 삶기', '달걀 + 치즈 + 후추로 소스 만들기', '판체타·마늘 볶기', '면수 1컵 남기고 파스타 건지기', '불 끄고 달걀 소스·면수로 크리미하게 버무리기']
     }
   ],
   '분식': [
     {
-      name: '백종원의 국물 떡볶이',
-      chef: '백종원',
-      rating: 4.9,
-      icon: '🌶️',
-      image: 'https://images.unsplash.com/photo-1635363638580-c2809d049eee?w=520&h=200&fit=crop&auto=format&q=80',
-      time: '20분',
-      difficulty: '쉬움',
+      name: '백종원의 국물 떡볶이', chef: '백종원', rating: 4.9, icon: '🌶️',
+      time: '20분', difficulty: '쉬움',
       ingredients: ['떡볶이 떡 300g', '어묵 2장', '고추장 2T', '고춧가루 1T', '간장 1T', '설탕 2T', '멸치육수 2컵', '파'],
       steps: ['멸치육수 내기', '육수에 고추장·고춧가루·간장·설탕 풀기', '떡·어묵 넣고 끓이기', '소스가 떡에 배도록 5분 더 조리', '파 올리고 마무리']
     },
     {
-      name: '백종원의 참치 김밥',
-      chef: '백종원',
-      rating: 4.7,
-      icon: '🌯',
-      image: 'https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=520&h=200&fit=crop&auto=format&q=80',
-      time: '30분',
-      difficulty: '보통',
+      name: '백종원의 참치 김밥', chef: '백종원', rating: 4.7, icon: '🌯',
+      time: '30분', difficulty: '보통',
       ingredients: ['밥 2공기', '참치캔 1개', '마요네즈 2T', '단무지', '시금치', '계란 2개', '당근', '김', '참기름', '소금'],
       steps: ['밥에 참기름·소금 넣고 섞기', '참치 + 마요네즈 버무리기', '시금치·당근·계란 각각 준비', '김 위에 밥 펼치고 재료 올리기', '단단히 말아 썰어서 완성']
     }
@@ -803,17 +867,9 @@ function triggerWinEffect() {
 
 function showResult(food) {
   const body = document.getElementById('resultBody');
-  const heroImg = `
-    <div class="result-hero">
-      <img src="${FOOD_IMAGES[food]}" alt="${food}" loading="lazy"
-           onerror="this.style.opacity='0'">
-      <div class="hero-overlay">${EMOJI_MAP[food]} ${food} — Unsplash (CC0)</div>
-    </div>`;
-
   if (currentType === '배달') {
     const data = DELIVERY[food];
     body.innerHTML = `
-      ${heroImg}
       <div class="delivery-result">
         <h3>추천 메뉴</h3>
         <div class="delivery-chips">
@@ -824,15 +880,10 @@ function showResult(food) {
   } else {
     const list = RECIPES[food];
     body.innerHTML = `
-      ${heroImg}
       <div class="recipe-section">
         <h3>⭐ 유명 셰프 추천 레시피</h3>
         ${list.map(r => `
           <div class="recipe-card">
-            <div class="recipe-img">
-              <img src="${r.image}" alt="${r.name}" loading="lazy"
-                   onerror="this.parentElement.style.display='none'">
-            </div>
             <div class="recipe-head">
               <span class="recipe-icon">${r.icon}</span>
               <div>
@@ -874,6 +925,115 @@ function reroll() {
   slotEl.className = 'slot-text';
   slotEl.textContent = '?';
   setTimeout(startSlot, 60);
+}
+
+let weatherLoaded = false;
+let weatherPanelOpen = false;
+
+function toggleWeather() {
+  const panel = document.getElementById('weatherPanel');
+  const btn = document.getElementById('weatherBtn');
+  weatherPanelOpen = !weatherPanelOpen;
+  panel.classList.toggle('open', weatherPanelOpen);
+  btn.classList.toggle('active', weatherPanelOpen);
+  if (weatherPanelOpen && !weatherLoaded) fetchWeather();
+}
+
+function getWeatherCategory(code, temp) {
+  if (temp <= 5) return 'cold';
+  if (code >= 71 && code <= 77 || code === 85 || code === 86) return 'snowy';
+  if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82) || code === 95 || code === 96 || code === 99) return 'rainy';
+  if (code === 3 || code === 45 || code === 48) return 'cloudy';
+  if (temp >= 27) return 'sunny_hot';
+  return 'sunny_mild';
+}
+
+function getWeatherIcon(code, temp) {
+  if (temp <= 5) return '🥶';
+  if (code === 0) return temp >= 27 ? '🌡️☀️' : '☀️';
+  if (code <= 2) return '🌤️';
+  if (code === 3) return '☁️';
+  if (code === 45 || code === 48) return '🌫️';
+  if (code >= 51 && code <= 57) return '🌦️';
+  if (code >= 61 && code <= 67) return '🌧️';
+  if (code >= 71 && code <= 77) return '❄️';
+  if (code >= 80 && code <= 82) return '🌧️';
+  if (code === 85 || code === 86) return '🌨️';
+  if (code >= 95) return '⛈️';
+  return '🌤️';
+}
+
+function getWeatherLabel(code) {
+  if (code === 0) return '맑음';
+  if (code <= 2) return '대체로 맑음';
+  if (code === 3) return '흐림';
+  if (code === 45 || code === 48) return '안개';
+  if (code >= 51 && code <= 57) return '이슬비';
+  if (code >= 61 && code <= 67) return '비';
+  if (code >= 71 && code <= 77) return '눈';
+  if (code >= 80 && code <= 82) return '소나기';
+  if (code === 85 || code === 86) return '눈 소나기';
+  if (code >= 95) return '뇌우';
+  return '흐림';
+}
+
+async function fetchWeather() {
+  const content = document.getElementById('weatherContent');
+  content.innerHTML = '<div class="weather-loading">📍 위치를 확인하는 중...</div>';
+
+  try {
+    let lat, lon, cityName;
+    try {
+      const pos = await new Promise((res, rej) =>
+        navigator.geolocation.getCurrentPosition(res, rej, { timeout: 7000 })
+      );
+      lat = pos.coords.latitude;
+      lon = pos.coords.longitude;
+    } catch {
+      lat = 37.5665; lon = 126.9780; cityName = '서울';
+    }
+
+    const [weatherResp, geoResp] = await Promise.all([
+      fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,weathercode&timezone=auto`),
+      cityName ? Promise.resolve(null) : fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
+    ]);
+
+    const wData = await weatherResp.json();
+    if (!cityName && geoResp) {
+      const gData = await geoResp.json();
+      cityName = gData.address?.city || gData.address?.town || gData.address?.county || '현재 위치';
+    }
+
+    const temp = Math.round(wData.current.temperature_2m);
+    const apparent = Math.round(wData.current.apparent_temperature);
+    const code = wData.current.weathercode;
+    const category = getWeatherCategory(code, temp);
+    const rec = WEATHER_RECOMMEND[category];
+
+    content.innerHTML = `
+      <div class="weather-main">
+        <span class="weather-icon-big">${getWeatherIcon(code, temp)}</span>
+        <div>
+          <div class="weather-temp-num">${temp}°C</div>
+          <div class="weather-desc">${getWeatherLabel(code)} · 체감 ${apparent}°C</div>
+          <div class="weather-location">📍 ${cityName}</div>
+        </div>
+      </div>
+      <div class="weather-rec-title">🍽️ ${rec.label} — ${rec.desc}</div>
+      <div class="weather-food-grid">
+        ${rec.foods.map(f => `
+          <div class="weather-food-card">
+            <div class="weather-food-name">${f.emoji} ${f.name}</div>
+            <div class="weather-food-reason">${f.reason}</div>
+          </div>`).join('')}
+      </div>`;
+
+    document.getElementById('weatherBtnIcon').textContent = getWeatherIcon(code, temp).slice(0, 2);
+    document.getElementById('weatherBtnLabel').textContent = `${temp}°C`;
+    weatherLoaded = true;
+  } catch (e) {
+    content.innerHTML = `<div class="weather-error">😅 날씨 정보를 불러오지 못했어요.<br>잠시 후 다시 눌러주세요.</div>`;
+  }
 }
 
 function toggleTheme() {
