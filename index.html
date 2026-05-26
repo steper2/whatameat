@@ -625,6 +625,7 @@
       font-size: 1.2rem;
       font-weight: 900;
       margin-bottom: 20px;
+      color: var(--text);
     }
     .about-grid {
       display: grid;
@@ -638,7 +639,7 @@
       padding: 20px;
     }
     .about-card-icon { font-size: 1.8rem; margin-bottom: 10px; }
-    .about-card-title { font-weight: 900; font-size: 1rem; margin-bottom: 6px; }
+    .about-card-title { font-weight: 900; font-size: 1rem; margin-bottom: 6px; color: var(--text); }
     .about-card-desc { font-size: 0.82rem; color: var(--text-sub); line-height: 1.6; }
 
     /* ── PRIVACY MODAL ── */
@@ -818,6 +819,25 @@
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ── LIGHT MODE: 전체 텍스트 명시 오버라이드 ── */
+    :root[data-theme="light"] body { color: #111; }
+    :root[data-theme="light"] .disqus-section-title,
+    :root[data-theme="light"] .privacy-modal-title,
+    :root[data-theme="light"] .partner-modal-title,
+    :root[data-theme="light"] .modal-context,
+    :root[data-theme="light"] .recipe-title,
+    :root[data-theme="light"] .recipe-chef,
+    :root[data-theme="light"] .delivery-result h3,
+    :root[data-theme="light"] .chip,
+    :root[data-theme="light"] .ing,
+    :root[data-theme="light"] .step-item,
+    :root[data-theme="light"] .weather-temp-num,
+    :root[data-theme="light"] .weather-food-name,
+    :root[data-theme="light"] .slot-display,
+    :root[data-theme="light"] .meal-label,
+    :root[data-theme="light"] .form-success-title { color: #111; }
+    :root[data-theme="light"] .modal-close { color: #111; }
   </style>
   <!-- Google AdSense -->
   <meta name="google-adsense-account" content="ca-pub-6329891791047866">
