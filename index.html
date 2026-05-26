@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>시발 뭐먹지</title>
+  <title>오늘 뭐 먹지?</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
@@ -300,6 +300,59 @@
       color: var(--text-sub);
       line-height: 1.5;
     }
+    .app-link-section {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+    .app-link-label {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .app-link-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .app-link-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 16px 10px;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 900;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: filter 0.15s, transform 0.12s;
+      letter-spacing: -0.3px;
+    }
+    .app-link-btn:hover { filter: brightness(1.12); transform: translateY(-2px); }
+    .app-link-btn:active { transform: scale(0.97); }
+    .app-link-btn .app-sub {
+      font-size: 0.72rem;
+      font-weight: 400;
+      opacity: 0.85;
+      letter-spacing: 0;
+    }
+    .btn-baemin { background: #3AAA35; color: #fff; }
+    .btn-coupang { background: #C0392B; color: #fff; }
+    .app-link-note {
+      margin-top: 10px;
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      text-align: center;
+      line-height: 1.5;
+    }
 
     /* ── RECIPE CARDS ── */
     .recipe-section h3 {
@@ -535,7 +588,7 @@
 <body>
 
 <header>
-  <div class="app-title"><span>시발</span> 뭐먹지 🍽️</div>
+  <div class="app-title">오늘 <span>뭐 먹지</span>? 🍽️</div>
   <div style="display:flex;gap:8px;align-items:center">
     <button class="weather-btn" id="weatherBtn" onclick="toggleWeather()">
       <span id="weatherBtnIcon">🌤️</span>
@@ -565,7 +618,7 @@
       <div class="meal-card-header">
         <span class="meal-emoji">☀️</span>
         <div>
-          <div class="meal-label">아침 뭐먹지</div>
+          <div class="meal-label">아침 뭐 먹지?</div>
           <div class="meal-sub">오늘 아침은 뭘 먹을까?</div>
         </div>
       </div>
@@ -583,7 +636,7 @@
       <div class="meal-card-header">
         <span class="meal-emoji">🌞</span>
         <div>
-          <div class="meal-label">점심 뭐먹지</div>
+          <div class="meal-label">점심 뭐 먹지?</div>
           <div class="meal-sub">점심 메뉴 결정 전쟁 종료</div>
         </div>
       </div>
@@ -601,7 +654,7 @@
       <div class="meal-card-header">
         <span class="meal-emoji">🌕</span>
         <div>
-          <div class="meal-label">저녁 뭐먹지</div>
+          <div class="meal-label">저녁 뭐 먹지?</div>
           <div class="meal-sub">퇴근 후 뭐 먹을지 고민 끝</div>
         </div>
       </div>
@@ -1063,6 +1116,7 @@ function showResult(food) {
   const body = document.getElementById('resultBody');
   if (currentType === '배달') {
     const data = DELIVERY_MEAL[currentMeal][food];
+    const q = encodeURIComponent(food);
     body.innerHTML = `
       <div class="delivery-result">
         <h3>추천 메뉴</h3>
@@ -1070,6 +1124,20 @@ function showResult(food) {
           ${data.suggestions.map(s => `<span class="chip">${s}</span>`).join('')}
         </div>
         <div class="delivery-tip">💡 ${data.tip}</div>
+        <div class="app-link-section">
+          <div class="app-link-label">📍 위치 기반으로 지금 바로 주문</div>
+          <div class="app-link-btns">
+            <button class="app-link-btn btn-baemin" onclick="openDeliveryApp('baemin','${food}')">
+              🍀 배달의민족
+              <span class="app-sub">${food} 검색하기</span>
+            </button>
+            <button class="app-link-btn btn-coupang" onclick="openDeliveryApp('coupang','${food}')">
+              ⚡ 쿠팡이츠
+              <span class="app-sub">${food} 검색하기</span>
+            </button>
+          </div>
+          <div class="app-link-note">앱이 설치되어 있으면 앱으로, 아니면 웹으로 연결돼요</div>
+        </div>
       </div>`;
   } else {
     const list = RECIPES[food];
@@ -1119,6 +1187,33 @@ function reroll() {
   slotEl.className = 'slot-text';
   slotEl.textContent = '?';
   setTimeout(startSlot, 60);
+}
+
+function openDeliveryApp(app, food) {
+  const q = encodeURIComponent(food);
+  const config = {
+    baemin: {
+      scheme: `baemin://search?query=${q}`,
+      web: `https://www.baemin.com/find-restaurant?query=${q}`
+    },
+    coupang: {
+      scheme: `coupangeats://search?keyword=${q}`,
+      web: `https://www.coupangeats.com/`
+    }
+  };
+  const { scheme, web } = config[app];
+
+  // 앱이 설치돼 있으면 visibilitychange 로 감지, 없으면 웹 폴백
+  let appOpened = false;
+  const onVis = () => { if (document.hidden) appOpened = true; };
+  document.addEventListener('visibilitychange', onVis);
+
+  window.location.href = scheme;
+
+  setTimeout(() => {
+    document.removeEventListener('visibilitychange', onVis);
+    if (!appOpened) window.open(web, '_blank');
+  }, 1400);
 }
 
 let weatherLoaded = false;
