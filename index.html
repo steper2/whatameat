@@ -1,14 +1,764 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+  <title>시발 뭐먹지</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root[data-theme="dark"] {
+      --bg: #0d0d0d;
+      --surface: #1a1a1a;
+      --surface2: #242424;
+      --border: #333;
+      --text: #ffffff;
+      --text-sub: #999;
+      --accent: #f5e642;
+      --accent-hover: #ffe000;
+      --delivery: #ff6b35;
+      --cook: #4ecdc4;
+      --card-shadow: 0 4px 24px rgba(0,0,0,0.6);
+      --modal-bg: rgba(0,0,0,0.85);
+    }
+    :root[data-theme="light"] {
+      --bg: #f0f0f0;
+      --surface: #ffffff;
+      --surface2: #e8e8e8;
+      --border: #ddd;
+      --text: #111;
+      --text-sub: #666;
+      --accent: #111;
+      --accent-hover: #333;
+      --delivery: #e55a2b;
+      --cook: #2a9d8f;
+      --card-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      --modal-bg: rgba(0,0,0,0.6);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans KR', system-ui, sans-serif;
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+    }
+    .app-title {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+    .app-title span { color: var(--accent); }
+    .theme-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .theme-btn:hover { background: var(--border); transform: scale(1.04); }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 36px 20px 60px;
+    }
+    .subtitle {
+      text-align: center;
+      color: var(--text-sub);
+      font-size: 0.9rem;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    /* ── MEAL CARDS ── */
+    .meal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .meal-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .meal-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,0.3); }
+    .meal-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .meal-emoji { font-size: 2.4rem; }
+    .meal-label { font-size: 1.3rem; font-weight: 900; }
+    .meal-sub { font-size: 0.78rem; color: var(--text-sub); margin-top: 2px; }
+    .action-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .action-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 14px 10px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.15s, filter 0.15s;
+    }
+    .action-btn:hover { transform: scale(1.04); filter: brightness(1.15); }
+    .action-btn:active { transform: scale(0.97); }
+    .action-btn .btn-emoji { font-size: 1.6rem; }
+    .btn-delivery {
+      background: var(--delivery);
+      color: #fff;
+    }
+    .btn-cook {
+      background: var(--cook);
+      color: #fff;
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--modal-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      padding: 20px;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 88vh;
+      overflow-y: auto;
+      transform: translateY(30px) scale(0.96);
+      transition: transform 0.3s;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    .modal-close {
+      float: right;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      margin-left: 10px;
+    }
+    .modal-context {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      margin-bottom: 18px;
+    }
+
+    /* ── SLOT MACHINE ── */
+    .slot-wrapper {
+      text-align: center;
+      padding: 20px 0 28px;
+    }
+    .slot-display {
+      font-size: 3.2rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .slot-text {
+      display: inline-block;
+      transition: none;
+    }
+    .slot-text.spinning {
+      animation: slotSpin 0.08s steps(1) infinite;
+    }
+    .slot-text.landing {
+      animation: slotLand 0.4s cubic-bezier(.17,.67,.35,1.2) forwards;
+    }
+    @keyframes slotSpin {
+      0%   { transform: translateY(-10%); opacity: 0.7; }
+      50%  { transform: translateY(10%); opacity: 1; }
+      100% { transform: translateY(-10%); opacity: 0.7; }
+    }
+    @keyframes slotLand {
+      0%   { transform: scale(1.3); opacity: 0; }
+      60%  { transform: scale(0.95); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .slot-result-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #111;
+      border-radius: 50px;
+      padding: 6px 18px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    /* ── DELIVERY RESULT ── */
+    .delivery-result { margin-top: 4px; }
+    .delivery-result h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-sub);
+    }
+    .delivery-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 6px 14px;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+    .delivery-tip {
+      margin-top: 16px;
+      background: var(--surface2);
+      border-left: 3px solid var(--delivery);
+      border-radius: 0 10px 10px 0;
+      padding: 12px 14px;
+      font-size: 0.83rem;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    /* ── RECIPE CARDS ── */
+    .recipe-section h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-sub);
+      margin-bottom: 14px;
+    }
+    .recipe-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+    .recipe-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .recipe-icon { font-size: 2.4rem; flex-shrink: 0; }
+    .recipe-title { font-size: 1.05rem; font-weight: 900; }
+    .recipe-chef {
+      font-size: 0.78rem;
+      color: var(--text-sub);
+      margin-top: 3px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .recipe-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .meta-tag {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 3px 10px;
+      font-size: 0.77rem;
+      color: var(--text-sub);
+    }
+    .recipe-ingredients {
+      margin-bottom: 12px;
+    }
+    .recipe-ingredients h4, .recipe-steps h4 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-sub);
+      margin-bottom: 7px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .ingredient-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .ing {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 9px;
+      font-size: 0.8rem;
+    }
+    .step-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .step-item {
+      display: flex;
+      gap: 10px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #111;
+      font-size: 0.72rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .rating { color: #f5c842; }
+
+    /* ── REROLL BTN ── */
+    .reroll-btn {
+      width: 100%;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 12px;
+      border: 2px dashed var(--border);
+      background: transparent;
+      color: var(--text-sub);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .reroll-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--surface2);
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  </style>
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+
+<header>
+  <div class="app-title"><span>시발</span> 뭐먹지 🍽️</div>
+  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
+    <span id="themeIcon">☀️</span>
+    <span id="themeLabel">라이트 모드</span>
+  </button>
+</header>
+
+<main>
+  <p class="subtitle">
+    매일 반복되는 고민... 이제 그만해.<br>
+    아침·점심·저녁 눌러서 바로 결정하자.
+  </p>
+
+  <div class="meal-grid">
+    <div class="meal-card">
+      <div class="meal-card-header">
+        <span class="meal-emoji">☀️</span>
+        <div>
+          <div class="meal-label">아침 뭐먹지</div>
+          <div class="meal-sub">오늘 아침은 뭘 먹을까?</div>
+        </div>
+      </div>
+      <div class="action-btns">
+        <button class="action-btn btn-delivery" onclick="openModal('아침', '배달')">
+          <span class="btn-emoji">🛵</span>배달
+        </button>
+        <button class="action-btn btn-cook" onclick="openModal('아침', '요리')">
+          <span class="btn-emoji">🧑‍🍳</span>요리
+        </button>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="meal-card-header">
+        <span class="meal-emoji">🌞</span>
+        <div>
+          <div class="meal-label">점심 뭐먹지</div>
+          <div class="meal-sub">점심 메뉴 결정 전쟁 종료</div>
+        </div>
+      </div>
+      <div class="action-btns">
+        <button class="action-btn btn-delivery" onclick="openModal('점심', '배달')">
+          <span class="btn-emoji">🛵</span>배달
+        </button>
+        <button class="action-btn btn-cook" onclick="openModal('점심', '요리')">
+          <span class="btn-emoji">🧑‍🍳</span>요리
+        </button>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="meal-card-header">
+        <span class="meal-emoji">🌕</span>
+        <div>
+          <div class="meal-label">저녁 뭐먹지</div>
+          <div class="meal-sub">퇴근 후 뭐 먹을지 고민 끝</div>
+        </div>
+      </div>
+      <div class="action-btns">
+        <button class="action-btn btn-delivery" onclick="openModal('저녁', '배달')">
+          <span class="btn-emoji">🛵</span>배달
+        </button>
+        <button class="action-btn btn-cook" onclick="openModal('저녁', '요리')">
+          <span class="btn-emoji">🧑‍🍳</span>요리
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeOnBg(event)">
+  <div class="modal" id="modalContent">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-context" id="modalContext"></div>
+
+    <!-- Slot -->
+    <div class="slot-wrapper">
+      <div class="slot-display">
+        <span class="slot-text" id="slotText">?</span>
+      </div>
+      <div id="resultBadge" style="margin-top:8px;display:none">
+        <span class="slot-result-badge" id="badgeContent"></span>
+      </div>
+    </div>
+
+    <!-- Result body -->
+    <div id="resultBody"></div>
+
+    <button class="reroll-btn" id="rerollBtn" style="display:none" onclick="reroll()">
+      🎲 다시 뽑기
+    </button>
+  </div>
+</div>
+
+<script>
+const CATEGORIES = ['한식', '일식', '중식', '양식', '분식'];
+
+const EMOJI_MAP = { '한식':'🍚', '일식':'🍣', '중식':'🥡', '양식':'🍝', '분식':'🥕' };
+
+const DELIVERY = {
+  '한식': {
+    suggestions: ['치킨', '삼겹살세트', '김치찌개 백반', '순대국밥', '감자탕', '불고기 덮밥'],
+    tip: '배달의민족 · 쿠팡이츠에서 "한식" 검색. 저녁 피크타임엔 리뷰 1000개+ 업체를 추천!'
+  },
+  '일식': {
+    suggestions: ['초밥 세트', '라멘', '돈까스', '우동', '나베', '텐동'],
+    tip: '일식은 매장 직접 방문이 더 맛있는 경우가 많아요. 배달 시 "포장 가능" 업체를 선택하면 퀄리티 ↑'
+  },
+  '중식': {
+    suggestions: ['짜장면', '짬뽕', '탕수육', '마파두부', '양장피', '팔보채'],
+    tip: '중식 배달은 면류가 퀄리티가 잘 유지돼요. 짬뽕·짜장은 도착 즉시 먹어야 맛있음!'
+  },
+  '양식': {
+    suggestions: ['피자', '파스타', '버거', '샐러드 세트', '스테이크 도시락', '리조또'],
+    tip: '피자는 배달 최강! 파스타는 면 불어남 주의. 크림류 > 오일류 > 토마토류 순으로 배달 후 퀄리티 유지'
+  },
+  '분식': {
+    suggestions: ['떡볶이', '순대볶음', '김밥', '라볶이', '핫도그', '튀김 세트'],
+    tip: '분식은 1만원대로 푸짐하게! 튀김류는 빨리 먹을수록 바삭해서 맛있어요.'
+  }
+};
+
+const RECIPES = {
+  '한식': [
+    {
+      name: '백종원의 제육볶음',
+      chef: '백종원',
+      rating: 4.9,
+      icon: '🥩',
+      time: '30분',
+      difficulty: '쉬움',
+      ingredients: ['돼지 앞다리살 400g', '고추장 3T', '간장 2T', '설탕 1T', '참기름 1T', '다진마늘 1T', '양파', '대파'],
+      steps: ['돼지고기 먹기 좋게 썬다', '양념 재료 모두 섞어 고기에 30분 재운다', '달군 팬에 양파 먼저 볶는다', '재운 고기를 강불에 볶는다', '대파·깨 넣고 마무리']
+    },
+    {
+      name: '백종원의 된장찌개',
+      chef: '백종원',
+      rating: 4.8,
+      icon: '🍲',
+      time: '20분',
+      difficulty: '쉬움',
+      ingredients: ['된장 2T', '두부 1/2모', '호박 1/4개', '버섯', '멸치육수 2컵', '다진마늘 1t'],
+      steps: ['멸치로 육수를 낸다', '육수에 된장을 잘 풀어 넣는다', '두부·호박 넣고 끓인다', '버섯·마늘 넣고 한소끔 끓인다', '파를 올리고 마무리']
+    }
+  ],
+  '일식': [
+    {
+      name: 'Nobu 미소 블랙 코드 피시',
+      chef: 'Nobu Matsuhisa ⭐ 미슐랭',
+      rating: 4.9,
+      icon: '🐟',
+      time: '2일',
+      difficulty: '어려움',
+      ingredients: ['은대구 4조각', '백미소 3T', '미림 2T', '사케 2T', '설탕 1T'],
+      steps: ['미소·미림·사케·설탕으로 마리네이드 만들기', '생선을 마리네이드에 48시간 재운다', '여분의 미소를 깨끗이 닦아낸다', '브로일러에서 황금빛 될 때까지 굽는다', '오븐 200°C에서 8분 마저 익힌다']
+    },
+    {
+      name: '정통 도쿄식 쇼유 라멘',
+      chef: 'Ivan Orkin (뉴욕타임즈 선정 라멘 장인)',
+      rating: 4.8,
+      icon: '🍜',
+      time: '3시간',
+      difficulty: '보통',
+      ingredients: ['돼지뼈 1kg', '닭 뼈대', '간장 1/2컵', '미림 3T', '라멘면 2인분', '차슈', '반숙 달걀 2개', '파 1줄기', '나루토'],
+      steps: ['돼지뼈·닭뼈로 진한 육수 3시간 끓이기', '간장·미림으로 타레(양념장) 만들기', '차슈 포크 조린 뒤 얇게 슬라이스', '달걀 반숙 후 간장 소스에 재우기', '면 삶고 육수 + 타레 + 토핑 올려 완성']
+    }
+  ],
+  '중식': [
+    {
+      name: '이연복의 짜장면',
+      chef: '이연복 (목란 오너 셰프)',
+      rating: 4.9,
+      icon: '🍝',
+      time: '40분',
+      difficulty: '보통',
+      ingredients: ['중면 2인분', '춘장 4T', '돼지고기 200g', '양파 2개', '감자 1개', '캐러멜 설탕 1T', '굴소스 1T', '전분물'],
+      steps: ['양파·감자 깍둑 썰기', '돼지고기 볶다가 채소 추가', '춘장 넣고 캐러멜라이즈 처리', '물 넣고 10분 끓이기', '전분물로 농도 맞추고 면 위에 올리기']
+    },
+    {
+      name: '이연복의 마파두부',
+      chef: '이연복 (목란 오너 셰프)',
+      rating: 4.8,
+      icon: '🫕',
+      time: '25분',
+      difficulty: '쉬움',
+      ingredients: ['두부 1모', '다진 돼지고기 150g', '두반장 2T', '간장 1T', '고추기름', '다진마늘', '화자오', '전분물'],
+      steps: ['두부 2cm로 썰어 소금물에 데친다', '고추기름에 마늘·두반장을 볶는다', '돼지고기 넣고 볶는다', '육수 붓고 두부 넣어 끓인다', '전분물로 농도 맞추고 화자오 뿌리기']
+    }
+  ],
+  '양식': [
+    {
+      name: '고든 램지의 퍼펙트 스테이크',
+      chef: 'Gordon Ramsay ⭐ 미슐랭 7스타',
+      rating: 4.9,
+      icon: '🥩',
+      time: '20분',
+      difficulty: '보통',
+      ingredients: ['립아이 300g', '버터 2T', '마늘 3쪽', '로즈마리 2줄기', '타임 2줄기', '소금', '후추', '올리브오일'],
+      steps: ['상온에 30분 꺼내두고 소금·후추로 간', '달군 주철 팬에 올리브오일', '강불에서 2분씩 앞뒤 굽기', '버터·마늘·허브 넣고 배스팅', '10분 레스팅 후 썰어서 완성']
+    },
+    {
+      name: '고든 램지의 카르보나라',
+      chef: 'Gordon Ramsay ⭐ 미슐랭 7스타',
+      rating: 4.8,
+      icon: '🍝',
+      time: '25분',
+      difficulty: '쉬움',
+      ingredients: ['스파게티 200g', '판체타 100g', '달걀 2개 + 노른자 2개', '파르미지아노 50g', '마늘 2쪽', '후추'],
+      steps: ['소금물에 파스타 알덴테로 삶기', '달걀 + 치즈 + 후추로 소스 만들기', '판체타·마늘 볶기', '면수 1컵 남기고 파스타 건지기', '불 끄고 달걀 소스·면수로 크리미하게 버무리기']
+    }
+  ],
+  '분식': [
+    {
+      name: '백종원의 국물 떡볶이',
+      chef: '백종원',
+      rating: 4.9,
+      icon: '🌶️',
+      time: '20분',
+      difficulty: '쉬움',
+      ingredients: ['떡볶이 떡 300g', '어묵 2장', '고추장 2T', '고춧가루 1T', '간장 1T', '설탕 2T', '멸치육수 2컵', '파'],
+      steps: ['멸치육수 내기', '육수에 고추장·고춧가루·간장·설탕 풀기', '떡·어묵 넣고 끓이기', '소스가 떡에 배도록 5분 더 조리', '파 올리고 마무리']
+    },
+    {
+      name: '백종원의 참치 김밥',
+      chef: '백종원',
+      rating: 4.7,
+      icon: '🌯',
+      time: '30분',
+      difficulty: '보통',
+      ingredients: ['밥 2공기', '참치캔 1개', '마요네즈 2T', '단무지', '시금치', '계란 2개', '당근', '김', '참기름', '소금'],
+      steps: ['밥에 참기름·소금 넣고 섞기', '참치 + 마요네즈 버무리기', '시금치·당근·계란 각각 준비', '김 위에 밥 펼치고 재료 올리기', '단단히 말아 썰어서 완성']
+    }
+  ]
+};
+
+let currentMeal = '';
+let currentType = '';
+let currentFood = '';
+
+function openModal(meal, type) {
+  currentMeal = meal;
+  currentType = type;
+  document.getElementById('modalContext').textContent =
+    `${meal === '아침' ? '☀️' : meal === '점심' ? '🌞' : '🌕'} ${meal}  ·  ${type === '배달' ? '🛵 배달' : '🧑‍🍳 요리'}`;
+  document.getElementById('resultBody').innerHTML = '';
+  document.getElementById('rerollBtn').style.display = 'none';
+  document.getElementById('resultBadge').style.display = 'none';
+
+  document.getElementById('modalOverlay').classList.add('open');
+  startSlot();
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+function closeOnBg(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+function startSlot() {
+  const slotEl = document.getElementById('slotText');
+  slotEl.className = 'slot-text spinning';
+
+  let tick = 0;
+  const spinDuration = 1600;
+  const interval = setInterval(() => {
+    slotEl.textContent = CATEGORIES[tick % CATEGORIES.length];
+    tick++;
+  }, 80);
+
+  setTimeout(() => {
+    clearInterval(interval);
+    const picked = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
+    currentFood = picked;
+    slotEl.textContent = picked;
+    slotEl.className = 'slot-text landing';
+
+    const badge = document.getElementById('resultBadge');
+    document.getElementById('badgeContent').textContent = `${EMOJI_MAP[picked]} ${picked} 확정!`;
+    badge.style.display = 'block';
+
+    document.getElementById('rerollBtn').style.display = 'block';
+    showResult(picked);
+  }, spinDuration);
+}
+
+function showResult(food) {
+  const body = document.getElementById('resultBody');
+  if (currentType === '배달') {
+    const data = DELIVERY[food];
+    body.innerHTML = `
+      <div class="delivery-result">
+        <h3>추천 메뉴</h3>
+        <div class="delivery-chips">
+          ${data.suggestions.map(s => `<span class="chip">${s}</span>`).join('')}
+        </div>
+        <div class="delivery-tip">💡 ${data.tip}</div>
+      </div>`;
+  } else {
+    const list = RECIPES[food];
+    body.innerHTML = `
+      <div class="recipe-section">
+        <h3>⭐ 유명 셰프 추천 레시피</h3>
+        ${list.map(r => `
+          <div class="recipe-card">
+            <div class="recipe-head">
+              <span class="recipe-icon">${r.icon}</span>
+              <div>
+                <div class="recipe-title">${r.name}</div>
+                <div class="recipe-chef"><span class="rating">★</span> ${r.rating} &nbsp;·&nbsp; ${r.chef}</div>
+              </div>
+            </div>
+            <div class="recipe-meta">
+              <span class="meta-tag">⏱ ${r.time}</span>
+              <span class="meta-tag">🔥 ${r.difficulty}</span>
+            </div>
+            <div class="recipe-ingredients">
+              <h4>재료</h4>
+              <div class="ingredient-list">
+                ${r.ingredients.map(i => `<span class="ing">${i}</span>`).join('')}
+              </div>
+            </div>
+            <div class="recipe-steps">
+              <h4>조리 순서</h4>
+              <ol class="step-list">
+                ${r.steps.map((s, i) => `
+                  <li class="step-item">
+                    <span class="step-num">${i + 1}</span>
+                    <span>${s}</span>
+                  </li>`).join('')}
+              </ol>
+            </div>
+          </div>`).join('')}
+      </div>`;
+  }
+}
+
+function reroll() {
+  document.getElementById('resultBody').innerHTML = '';
+  document.getElementById('rerollBtn').style.display = 'none';
+  document.getElementById('resultBadge').style.display = 'none';
+  const slotEl = document.getElementById('slotText');
+  slotEl.className = 'slot-text';
+  slotEl.textContent = '?';
+  setTimeout(() => startSlot(), 50);
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeIcon').textContent = isDark ? '🌙' : '☀️';
+  document.getElementById('themeLabel').textContent = isDark ? '다크 모드' : '라이트 모드';
+}
+</script>
 </body>
 </html>
