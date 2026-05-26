@@ -994,6 +994,89 @@
     .terms-body p, .terms-body li { font-size: 0.82rem; color: var(--text-sub); line-height: 1.7; }
     .terms-body ul { padding-left: 18px; }
     .terms-updated { font-size: 0.75rem; color: var(--text-sub); margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+
+    /* ── MASTER GUIDE ── */
+    .master-section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 20px 48px;
+      border-top: 1px solid var(--border);
+      padding-top: 56px;
+    }
+    .master-chapter {
+      margin-bottom: 40px;
+    }
+    .master-chapter-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--delivery);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .master-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+    .master-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .master-card:hover { border-color: var(--delivery); transform: translateY(-3px); }
+    .master-card-title {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .master-card ul { padding-left: 16px; margin: 0; }
+    .master-card li { font-size: 0.82rem; color: var(--text-sub); line-height: 1.8; }
+    .master-card p { font-size: 0.82rem; color: var(--text-sub); line-height: 1.7; margin: 0; }
+    .master-tag {
+      display: inline-block;
+      background: var(--delivery);
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 50px;
+      margin: 3px 4px 3px 0;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .master-recipe {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-top: 12px;
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+    .master-recipe strong { color: var(--text); }
+    .master-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+    }
+    .master-table th, .master-table td {
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      text-align: left;
+      color: var(--text-sub);
+    }
+    .master-table th {
+      background: var(--surface2);
+      font-weight: 700;
+      color: var(--text);
+    }
+    .master-table tr:hover td { background: var(--surface); }
   </style>
   <!-- Google AdSense -->
   <meta name="google-adsense-account" content="ca-pub-6329891791047866">
@@ -1205,6 +1288,255 @@
       </div>
     </div>
   </div>
+  </div> <!-- guide-body-inner -->
+  </div> <!-- guide-body -->
+</section>
+
+<!-- MASTER GUIDE -->
+<section class="master-section" id="masterGuide">
+
+  <!-- 토글 버튼 -->
+  <button class="guide-toggle-btn" id="masterToggleBtn" onclick="toggleMaster()" style="margin-bottom:0">
+    <div class="guide-toggle-btn-left">
+      <span style="font-size:1.6rem">🌍</span>
+      <div>
+        <div class="guide-toggle-btn-title">세계 음식 마스터 가이드</div>
+        <div class="guide-toggle-btn-sub">유명 셰프 · TOP100 · 난이도 · 술 페어링 · 다이어트 식단 · 창업 메뉴</div>
+      </div>
+    </div>
+    <span class="guide-toggle-arrow">▼</span>
+  </button>
+
+  <div class="guide-body" id="masterBody">
+  <div class="guide-body-inner">
+
+    <!-- 1. 장르별 유명 셰프 -->
+    <div class="master-chapter">
+      <div class="master-chapter-title">👨‍🍳 1. 장르별 유명 셰프</div>
+      <div class="master-grid">
+        <div class="master-card">
+          <div class="master-card-title">🍚 한식 셰프</div>
+          <ul><li>백종원 — 대중 레시피의 대가</li><li>안성재 — 미슐랭 3스타 모수</li><li>최현석 — 창의적 한식 퓨전</li><li>에드워드 리 — 한식×남부 아메리칸 퓨전</li></ul>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🍣 일식 셰프</div>
+          <ul><li>지로 오노 — 스시의 신 (꿈의 스시)</li><li>노부 마츠히사 — 일식×페루 퓨전</li><li>모리모토 마사하루 — 아이언 셰프</li></ul>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🍝 양식 셰프</div>
+          <ul><li>고든 램지 — 미슐랭 7스타</li><li>제이미 올리버 — 캐주얼 이탈리안</li><li>마시모 보투라 — 이탈리아 모던 퀴진</li><li>알랭 뒤카스 — 프렌치 파인다이닝</li></ul>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🥡 중식 셰프</div>
+          <ul><li>왕강 — 사천 요리 마스터</li><li>켄 홈 — 중식 세계화의 선구자</li><li>이연복 — 한국 중식 오너 셰프</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. 아침 추천 메뉴 -->
+    <div class="master-chapter">
+      <div class="master-chapter-title">☀️ 2. 아침 추천 메뉴</div>
+      <div class="master-grid">
+        <div class="master-card">
+          <div class="master-card-title">🍚 한식 아침</div>
+          <div class="master-tag">전복죽</div><div class="master-tag">북엇국</div><div class="master-tag">계란찜</div><div class="master-tag">미역국</div><div class="master-tag">콩나물죽</div>
+          <div class="master-recipe"><strong>전복죽</strong> — 전복 볶기 → 불린 쌀 추가 → 물 붓고 40분 끓이기 → 참기름 마무리</div>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🍣 일식 아침</div>
+          <div class="master-tag">미소시루</div><div class="master-tag">타마고야키</div><div class="master-tag">오차즈케</div><div class="master-tag">낫토</div><div class="master-tag">온센타마고</div>
+          <div class="master-recipe"><strong>타마고야키</strong> — 계란+다시 섞기 → 얇게 여러 번 말아 굽기 → 사각 모양 잡기</div>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🍝 양식 아침</div>
+          <div class="master-tag">에그베네딕트</div><div class="master-tag">팬케이크</div><div class="master-tag">오믈렛</div><div class="master-tag">아보카도 토스트</div><div class="master-tag">그래놀라</div>
+          <div class="master-recipe"><strong>팬케이크</strong> — 밀가루+우유+계란 반죽 → 버터팬에서 굽기 → 메이플 시럽 추가</div>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🥡 중식 아침</div>
+          <div class="master-tag">딤섬</div><div class="master-tag">죽 (쌀죽)</div><div class="master-tag">샤오롱바오</div><div class="master-tag">요우티아오</div><div class="master-tag">두유</div>
+          <div class="master-recipe"><strong>샤오롱바오</strong> — 육즙 젤리+다진 고기 → 만두피 포장 → 찜기 8분 조리</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 점심 추천 메뉴 -->
+    <div class="master-chapter">
+      <div class="master-chapter-title">🌞 3. 점심 추천 메뉴</div>
+      <div class="master-grid">
+        <div class="master-card">
+          <div class="master-card-title">🍚 한식 점심</div>
+          <ul><li>제육볶음 + 공기밥</li><li>비빔밥 (돌솥)</li><li>된장찌개 정식</li><li>순두부찌개</li><li>불고기 덮밥</li><li>냉면 (물/비빔)</li></ul>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🍣 일식 점심</div>
+          <ul><li>라멘 (쇼유/미소/시오)</li><li>돈카츠 정식</li><li>우동 (카케/붓카케)</li><li>소바 (자루/온)</li><li>카레라이스</li><li>오야코동</li></ul>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🍝 양식 점심</div>
+          <ul><li>카르보나라</li><li>리조또</li><li>라자냐</li><li>햄버거</li><li>피자</li><li>시저 샐러드</li></ul>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🥡 중식 점심</div>
+          <ul><li>마파두부 덮밥</li><li>짜장면</li><li>탄탄면</li><li>유린기 정식</li><li>볶음밥</li><li>딤섬 세트</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. 저녁 추천 메뉴 -->
+    <div class="master-chapter">
+      <div class="master-chapter-title">🌕 4. 저녁 추천 메뉴</div>
+      <div class="master-grid">
+        <div class="master-card">
+          <div class="master-card-title">🍚 한식 저녁</div>
+          <ul><li>삼겹살 + 쌈채소</li><li>갈비찜</li><li>보쌈 + 김치</li><li>감자탕</li><li>곱창전골</li><li>해물파전 + 막걸리</li></ul>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🍣 일식 저녁</div>
+          <ul><li>스시 오마카세</li><li>샤브샤브</li><li>야키니쿠</li><li>스키야키</li><li>나베 (전골)</li><li>사시미 모둠</li></ul>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🍝 양식 저녁</div>
+          <ul><li>티본 스테이크</li><li>양갈비</li><li>비프 웰링턴</li><li>트러플 리조또</li><li>랍스터 구이</li><li>오리 콩피</li></ul>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🥡 중식 저녁</div>
+          <ul><li>훠궈 (마라/백탕)</li><li>북경오리</li><li>동파육</li><li>마라샹궈</li><li>양꼬치</li><li>팔보채</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. TOP100 -->
+    <div class="master-chapter">
+      <div class="master-chapter-title">🏆 5. 세계 음식 TOP 10 추천</div>
+      <div style="overflow-x:auto">
+        <table class="master-table">
+          <tr><th>장르</th><th>대표 메뉴</th><th>특징</th></tr>
+          <tr><td>한식</td><td>김치찌개</td><td>한국 대표 발효 국물 요리, 깊은 감칠맛</td></tr>
+          <tr><td>한식</td><td>비빔밥</td><td>영양 균형 완벽, 세계 건강식 TOP 선정</td></tr>
+          <tr><td>일식</td><td>라멘</td><td>진한 육수 기반, 지역마다 다른 개성</td></tr>
+          <tr><td>일식</td><td>스시 오마카세</td><td>고급 해산물 요리, 셰프 철학이 담긴 코스</td></tr>
+          <tr><td>양식</td><td>비프 웰링턴</td><td>파인다이닝 정점, 고든 램지 시그니처</td></tr>
+          <tr><td>양식</td><td>나폴리 피자</td><td>세계적인 대중 음식, 유네스코 무형문화유산</td></tr>
+          <tr><td>중식</td><td>마파두부</td><td>사천식 매운맛, 화자오 향의 중독성</td></tr>
+          <tr><td>중식</td><td>훠궈</td><td>중국 대표 전골, 마라 육수의 깊은 향</td></tr>
+          <tr><td>분식</td><td>떡볶이</td><td>한국 대표 스트릿푸드, 외국인 최애 한식</td></tr>
+          <tr><td>분식</td><td>순대</td><td>야시장 인기 메뉴, 각 지역별 다양한 스타일</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 6. 난이도별 -->
+    <div class="master-chapter">
+      <div class="master-chapter-title">📊 6. 요리 난이도별 정리</div>
+      <div class="master-grid">
+        <div class="master-card">
+          <div class="master-card-title">🟢 초급 (15분 이내)</div>
+          <ul><li>김치볶음밥</li><li>계란찜</li><li>토스트</li><li>볶음밥</li><li>오믈렛</li><li>미소시루</li><li>라면</li></ul>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🟡 중급 (30~60분)</div>
+          <ul><li>제육볶음</li><li>라멘</li><li>리조또</li><li>돈카츠</li><li>마파두부</li><li>파스타</li><li>불고기</li></ul>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🔴 고급 (1시간 이상)</div>
+          <ul><li>비프 웰링턴</li><li>오마카세 스시</li><li>북경오리</li><li>갈비찜</li><li>트러플 리조또</li><li>비프 부르기뇽</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. 술 페어링 -->
+    <div class="master-chapter">
+      <div class="master-chapter-title">🍶 7. 음식 × 술 페어링 추천</div>
+      <div style="overflow-x:auto">
+        <table class="master-table">
+          <tr><th>요리</th><th>추천 술</th><th>이유</th></tr>
+          <tr><td>삼겹살</td><td>소주</td><td>기름진 맛을 깔끔하게 잡아줌</td></tr>
+          <tr><td>스시 / 사시미</td><td>사케 (준마이다이긴죠)</td><td>해산물의 신선함 극대화</td></tr>
+          <tr><td>스테이크</td><td>레드와인 (카베르네 소비뇽)</td><td>탄닌이 육즙과 완벽한 균형</td></tr>
+          <tr><td>양꼬치</td><td>칭다오 맥주</td><td>양고기 잡내를 씻어줌</td></tr>
+          <tr><td>떡볶이 / 분식</td><td>맥주 (라거)</td><td>매운맛을 중화</td></tr>
+          <tr><td>비프 웰링턴</td><td>보르도 와인</td><td>파인다이닝의 황금 조합</td></tr>
+          <tr><td>훠궈 (마라)</td><td>고량주 / 얼과토우</td><td>강한 향신료와 어울리는 향</td></tr>
+          <tr><td>해물파전</td><td>막걸리</td><td>한국 전통 페어링</td></tr>
+          <tr><td>피자</td><td>이탈리안 라거 / 키안티</td><td>토마토 산미와 조화</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 8. 다이어트 & 운동 식단 -->
+    <div class="master-chapter">
+      <div class="master-chapter-title">💪 8. 다이어트 & 운동 맞춤 식단</div>
+      <div class="master-grid">
+        <div class="master-card">
+          <div class="master-card-title">🏋️ 벌크업 식단</div>
+          <ul><li>닭가슴살 스테이크</li><li>불고기 덮밥 (현미)</li><li>연어 스테이크</li><li>계란 오믈렛</li><li>참치 김밥</li><li>소고기 미역국</li></ul>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🥗 다이어트 식단</div>
+          <ul><li>그릭요거트 + 과일</li><li>두부 스테이크</li><li>오차즈케</li><li>미소시루</li><li>닭가슴살 샐러드</li><li>곤약 떡볶이</li></ul>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">⚡ 고강도 운동 후 회복</div>
+          <ul><li>현미 비빔밥</li><li>닭가슴살 김밥</li><li>프로틴 팬케이크</li><li>과일 스무디 보울</li><li>아보카도 에그 토스트</li><li>두유 + 바나나</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. 레스토랑 창업 메뉴 -->
+    <div class="master-chapter">
+      <div class="master-chapter-title">🏪 9. 레스토랑 창업 메뉴 구성</div>
+      <div class="master-grid">
+        <div class="master-card">
+          <div class="master-card-title">🍶 한식 포차</div>
+          <ul><li><strong>메인:</strong> 제육볶음, 닭갈비</li><li><strong>사이드:</strong> 계란말이, 파전</li><li><strong>시그니처:</strong> 불맛 오돌뼈</li><li><strong>주류:</strong> 소주 / 막걸리</li><li><strong>객단가:</strong> 1만~2만원</li></ul>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🍱 일식 이자카야</div>
+          <ul><li><strong>메인:</strong> 야키토리, 규카츠</li><li><strong>사이드:</strong> 사시미, 에다마메</li><li><strong>시그니처:</strong> 오마카세 세트</li><li><strong>주류:</strong> 하이볼 / 사케</li><li><strong>객단가:</strong> 3만~6만원</li></ul>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🌭 스트릿 분식 브랜드</div>
+          <ul><li><strong>메인:</strong> 국물떡볶이</li><li><strong>사이드:</strong> 순대, 튀김</li><li><strong>시그니처:</strong> 치즈라볶이</li><li><strong>주류:</strong> 생맥주</li><li><strong>객단가:</strong> 5천~1만5천원</li></ul>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🍝 이탈리안 트라토리아</div>
+          <ul><li><strong>메인:</strong> 파스타 3종, 피자</li><li><strong>사이드:</strong> 카프레제, 브루스케타</li><li><strong>시그니처:</strong> 트러플 리조또</li><li><strong>주류:</strong> 하우스 와인</li><li><strong>객단가:</strong> 2만~4만원</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. 셰프 스타일 분석 -->
+    <div class="master-chapter">
+      <div class="master-chapter-title">⭐ 10. 세계 유명 셰프 스타일 분석</div>
+      <div class="master-grid">
+        <div class="master-card">
+          <div class="master-card-title">🇬🇧 고든 램지</div>
+          <p>강한 화력과 정확한 타이밍, 플레이팅 중심. 완벽주의적 기본기를 강조하며 재료 본연의 맛을 살리는 요리 철학.<br><br><strong>시그니처:</strong> 비프 웰링턴<br><strong>스타일:</strong> 클래식 프렌치 베이스</p>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🇯🇵 노부 마츠히사</div>
+          <p>일식과 페루 스타일의 퓨전으로 새로운 장르 개척. 미소 마리네이드와 세비체 기법을 결합.<br><br><strong>시그니처:</strong> 블랙 코드 미소<br><strong>스타일:</strong> 누에바 안디나 퓨전</p>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🇰🇷 백종원</div>
+          <p>대중적인 레시피와 효율적인 식당 운영 노하우. 누구나 따라할 수 있는 쉽고 맛있는 요리 전도사.<br><br><strong>시그니처:</strong> 제육볶음<br><strong>스타일:</strong> 실용적 대중 한식</p>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🇫🇷 알랭 뒤카스</div>
+          <p>프렌치 파인다이닝 정통 스타일. 제철 고급 재료 중심의 미니멀한 플레이팅과 정교한 소스.<br><br><strong>시그니처:</strong> 트러플 요리<br><strong>스타일:</strong> 모던 프렌치 미니멀</p>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🇰🇷 안성재</div>
+          <p>한국 전통 발효 식재료를 현대적으로 재해석. 미슐랭 3스타 모수의 오너 셰프.<br><br><strong>시그니처:</strong> 발효 한우 요리<br><strong>스타일:</strong> 모던 코리안</p>
+        </div>
+        <div class="master-card">
+          <div class="master-card-title">🇨🇳 이연복</div>
+          <p>한국식 중화요리의 대가. 강불과 향신료를 자유자재로 다루며 대중이 사랑하는 맛을 구현.<br><br><strong>시그니처:</strong> 짜장면, 마파두부<br><strong>스타일:</strong> 한국식 중화 퓨전</p>
+        </div>
+      </div>
+    </div>
+
   </div> <!-- guide-body-inner -->
   </div> <!-- guide-body -->
 </section>
@@ -2179,6 +2511,13 @@ async function submitPartner(e) {
 function toggleGuide() {
   const body = document.getElementById('guideBody');
   const btn  = document.getElementById('guideToggleBtn');
+  const open = body.classList.toggle('open');
+  btn.classList.toggle('open', open);
+}
+
+function toggleMaster() {
+  const body = document.getElementById('masterBody');
+  const btn  = document.getElementById('masterToggleBtn');
   const open = body.classList.toggle('open');
   btn.classList.toggle('open', open);
 }
