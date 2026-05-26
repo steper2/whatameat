@@ -3,7 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>오늘 뭐 먹지?</title>
+  <title>오늘 뭐 먹지? | 아침·점심·저녁 메뉴 추천 서비스</title>
+  <meta name="description" content="매일 반복되는 메뉴 고민, 이제 그만! 아침·점심·저녁 시간대별로 한식·일식·중식·양식·분식 메뉴를 랜덤 추천해드립니다. 배달·요리 모드, 날씨 맞춤 추천까지.">
+  <meta name="keywords" content="오늘 뭐 먹지, 메뉴 추천, 점심 추천, 저녁 추천, 배달 추천, 한식, 일식, 중식, 양식, 분식, 랜덤 메뉴">
+  <meta name="author" content="오늘 뭐 먹지?">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="오늘 뭐 먹지? | 아침·점심·저녁 메뉴 추천">
+  <meta property="og:description" content="매일 반복되는 메뉴 고민, 이제 그만! 시간대별·날씨별 맞춤 메뉴를 랜덤으로 추천해드립니다.">
+  <meta property="og:url" content="https://steper2.github.io/whatameat/">
+  <meta property="og:locale" content="ko_KR">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="오늘 뭐 먹지?">
+  <meta name="twitter:description" content="아침·점심·저녁 메뉴 랜덤 추천 서비스">
+  <link rel="canonical" href="https://steper2.github.io/whatameat/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
@@ -600,6 +613,74 @@
       padding: 20px 20px;
     }
 
+    /* ── ABOUT SECTION ── */
+    .about-section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 20px 40px;
+      border-top: 1px solid var(--border);
+    }
+    .about-title {
+      font-size: 1.2rem;
+      font-weight: 900;
+      margin-bottom: 20px;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .about-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+    .about-card-icon { font-size: 1.8rem; margin-bottom: 10px; }
+    .about-card-title { font-weight: 900; font-size: 1rem; margin-bottom: 6px; }
+    .about-card-desc { font-size: 0.82rem; color: var(--text-sub); line-height: 1.6; }
+
+    /* ── PRIVACY MODAL ── */
+    .privacy-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--modal-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      padding: 20px;
+    }
+    .privacy-overlay.open { opacity: 1; pointer-events: all; }
+    .privacy-modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 80vh;
+      overflow-y: auto;
+      transform: translateY(24px) scale(0.97);
+      transition: transform 0.3s;
+    }
+    .privacy-overlay.open .privacy-modal { transform: translateY(0) scale(1); }
+    .privacy-modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .privacy-modal-title { font-size: 1.1rem; font-weight: 900; }
+    .privacy-body h3 { font-size: 0.95rem; font-weight: 700; margin: 16px 0 6px; color: var(--accent); }
+    .privacy-body p, .privacy-body li { font-size: 0.82rem; color: var(--text-sub); line-height: 1.7; }
+    .privacy-body ul { padding-left: 18px; }
+    .privacy-body a { color: var(--accent); }
+    .privacy-updated { font-size: 0.75rem; color: var(--text-sub); margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+
     /* ── DISQUS ── */
     .disqus-section {
       max-width: 960px;
@@ -762,16 +843,8 @@
   </div>
 </div>
 
-<!-- AD: TOP BANNER -->
-<div class="ad-wrap ad-top">
-  <ins class="adsbygoogle"
-       style="display:block"
-       data-ad-client="ca-pub-6329891791047866"
-       data-ad-slot="auto"
-       data-ad-format="auto"
-       data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
+<!-- AD SPACE: TOP — Google Auto Ads will fill this area -->
+<div class="ad-wrap ad-top" aria-label="광고"></div>
 
 <main>
   <p class="subtitle">
@@ -779,16 +852,8 @@
     아침·점심·저녁 눌러서 바로 결정하자.
   </p>
 
-  <!-- AD: IN-CONTENT -->
-  <div class="ad-wrap ad-mid">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-6329891791047866"
-         data-ad-slot="auto"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
+  <!-- AD SPACE: IN-CONTENT — Google Auto Ads will fill this area -->
+  <div class="ad-wrap ad-mid" aria-label="광고"></div>
 
   <div class="meal-grid">
     <div class="meal-card">
@@ -847,16 +912,45 @@
   </div>
 </main>
 
-<!-- AD: BOTTOM RECTANGLE -->
-<div class="ad-wrap ad-bottom">
-  <ins class="adsbygoogle"
-       style="display:block"
-       data-ad-client="ca-pub-6329891791047866"
-       data-ad-slot="auto"
-       data-ad-format="auto"
-       data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
+<!-- AD SPACE: BOTTOM — Google Auto Ads will fill this area -->
+<div class="ad-wrap ad-bottom" aria-label="광고"></div>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-title">🍽️ 서비스 소개</div>
+  <div class="about-grid">
+    <div class="about-card">
+      <div class="about-card-icon">🎰</div>
+      <div class="about-card-title">랜덤 메뉴 추천</div>
+      <div class="about-card-desc">한식·일식·중식·양식·분식 5가지 장르를 슬롯머신처럼 뽑아 메뉴 결정 스트레스를 없애줍니다.</div>
+    </div>
+    <div class="about-card">
+      <div class="about-card-icon">⏰</div>
+      <div class="about-card-title">시간대별 맞춤 메뉴</div>
+      <div class="about-card-desc">아침·점심·저녁 각 시간대에 어울리는 메뉴를 별도로 구성해 더 현실적인 추천을 드립니다.</div>
+    </div>
+    <div class="about-card">
+      <div class="about-card-icon">🛵</div>
+      <div class="about-card-title">배달앱 바로 연동</div>
+      <div class="about-card-desc">메뉴가 결정되면 배달의민족·쿠팡이츠 앱으로 바로 이동해 즉시 주문할 수 있습니다.</div>
+    </div>
+    <div class="about-card">
+      <div class="about-card-icon">🌤️</div>
+      <div class="about-card-title">날씨 맞춤 추천</div>
+      <div class="about-card-desc">현재 위치의 날씨를 분석해 맑은 날엔 냉면, 비 오는 날엔 칼국수 같은 날씨 맞춤 메뉴를 추천합니다.</div>
+    </div>
+    <div class="about-card">
+      <div class="about-card-icon">🧑‍🍳</div>
+      <div class="about-card-title">레시피 제공</div>
+      <div class="about-card-desc">배달이 아닌 직접 요리할 때는 고평점 레시피와 재료, 조리 순서를 함께 안내해 드립니다.</div>
+    </div>
+    <div class="about-card">
+      <div class="about-card-icon">🌙</div>
+      <div class="about-card-title">다크/라이트 모드</div>
+      <div class="about-card-desc">눈이 편한 다크 모드와 밝고 깔끔한 라이트 모드를 상황에 맞게 전환할 수 있습니다.</div>
+    </div>
+  </div>
+</section>
 
 <!-- DISQUS -->
 <section class="disqus-section">
@@ -865,9 +959,51 @@
 </section>
 
 <footer class="site-footer">
-  <span class="footer-copy">© 2025 오늘 뭐 먹지?</span>
-  <button class="partner-btn" onclick="openPartner()">🤝 제휴 문의</button>
+  <span class="footer-copy">© 2026 오늘 뭐 먹지?</span>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <button class="partner-btn" onclick="document.getElementById('privacyOverlay').classList.add('open')">🔒 개인정보처리방침</button>
+    <button class="partner-btn" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">ℹ️ 서비스 소개</button>
+    <button class="partner-btn" onclick="openPartner()">🤝 제휴 문의</button>
+  </div>
 </footer>
+
+<!-- PRIVACY POLICY MODAL -->
+<div class="privacy-overlay" id="privacyOverlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="privacy-modal">
+    <div class="privacy-modal-head">
+      <span class="privacy-modal-title">🔒 개인정보처리방침</span>
+      <button class="modal-close" onclick="document.getElementById('privacyOverlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="privacy-body">
+      <p>오늘 뭐 먹지? (이하 "서비스")는 이용자의 개인정보를 중요시하며, 관련 법령을 준수합니다.</p>
+
+      <h3>1. 수집하는 정보</h3>
+      <p>본 서비스는 별도의 회원가입 없이 이용 가능합니다. 다음의 정보가 자동으로 수집될 수 있습니다.</p>
+      <ul>
+        <li>위치 정보 (날씨 추천 기능 사용 시, 이용자 동의 후 수집)</li>
+        <li>서비스 이용 기록, 접속 로그 (제3자 서비스를 통해 수집)</li>
+      </ul>
+
+      <h3>2. 쿠키(Cookie) 사용</h3>
+      <p>본 서비스는 Google AdSense 등 제3자 광고 서비스를 운영하며, 해당 서비스는 쿠키를 사용하여 이용자의 관심사에 맞는 광고를 제공할 수 있습니다. 이용자는 브라우저 설정을 통해 쿠키 저장을 거부할 수 있습니다.</p>
+
+      <h3>3. 제3자 서비스</h3>
+      <ul>
+        <li><strong>Google AdSense</strong> — 광고 제공 서비스. Google의 <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">개인정보처리방침</a> 적용.</li>
+        <li><strong>Disqus</strong> — 댓글 서비스. Disqus의 <a href="https://help.disqus.com/en/articles/1717103-disqus-privacy-policy" target="_blank" rel="noopener">개인정보처리방침</a> 적용.</li>
+        <li><strong>Open-Meteo</strong> — 날씨 데이터 제공. 수집된 위치 정보는 날씨 조회 후 즉시 폐기됩니다.</li>
+      </ul>
+
+      <h3>4. 광고 개인화 설정</h3>
+      <p>Google 광고 개인화를 관리하려면 <a href="https://adssettings.google.com" target="_blank" rel="noopener">Google 광고 설정</a>을 방문하세요.</p>
+
+      <h3>5. 문의</h3>
+      <p>개인정보 관련 문의는 서비스 내 제휴 문의 폼을 통해 연락해 주세요.</p>
+
+      <p class="privacy-updated">최종 업데이트: 2025년 1월 1일</p>
+    </div>
+  </div>
+</div>
 
 <!-- PARTNER MODAL -->
 <div class="partner-overlay" id="partnerOverlay" onclick="closePartnerOnBg(event)">
