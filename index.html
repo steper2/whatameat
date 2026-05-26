@@ -579,6 +579,121 @@
       line-height: 1.6;
     }
 
+    /* ── FOOTER ── */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-copy {
+      font-size: 0.78rem;
+      color: var(--text-sub);
+    }
+    .partner-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 9px 18px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    }
+    .partner-btn:hover { border-color: var(--accent); color: var(--accent); transform: scale(1.03); }
+
+    /* ── PARTNER MODAL ── */
+    .partner-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--modal-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      padding: 20px;
+    }
+    .partner-overlay.open { opacity: 1; pointer-events: all; }
+    .partner-modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 460px;
+      transform: translateY(28px) scale(0.96);
+      transition: transform 0.3s;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .partner-overlay.open .partner-modal { transform: translateY(0) scale(1); }
+    .partner-modal-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .partner-modal-title { font-size: 1.25rem; font-weight: 900; }
+    .partner-modal-desc { font-size: 0.83rem; color: var(--text-sub); margin-bottom: 22px; line-height: 1.5; }
+    .form-group { margin-bottom: 14px; }
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .form-input, .form-textarea {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
+    .form-textarea { height: 100px; }
+    .form-submit {
+      width: 100%;
+      margin-top: 6px;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      background: var(--accent);
+      color: #111;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: filter 0.15s, transform 0.1s;
+    }
+    .form-submit:hover { filter: brightness(1.1); transform: scale(1.01); }
+    .form-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .form-success {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .form-success-icon { font-size: 3rem; margin-bottom: 12px; }
+    .form-success-title { font-size: 1.1rem; font-weight: 900; margin-bottom: 6px; }
+    .form-success-desc { font-size: 0.85rem; color: var(--text-sub); line-height: 1.6; }
+
     /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -669,6 +784,40 @@
     </div>
   </div>
 </main>
+
+<footer class="site-footer">
+  <span class="footer-copy">© 2025 오늘 뭐 먹지?</span>
+  <button class="partner-btn" onclick="openPartner()">🤝 제휴 문의</button>
+</footer>
+
+<!-- PARTNER MODAL -->
+<div class="partner-overlay" id="partnerOverlay" onclick="closePartnerOnBg(event)">
+  <div class="partner-modal">
+    <div class="partner-modal-head">
+      <div class="partner-modal-title">🤝 제휴 문의</div>
+      <button class="modal-close" onclick="closePartner()">✕</button>
+    </div>
+    <p class="partner-modal-desc">광고, 제휴, 협업 등 다양한 문의를 남겨주세요.<br>빠르게 검토 후 연락드리겠습니다.</p>
+
+    <div id="partnerFormWrap">
+      <form id="partnerForm" onsubmit="submitPartner(event)">
+        <div class="form-group">
+          <label class="form-label" for="pName">이름 / 회사명</label>
+          <input class="form-input" id="pName" name="name" type="text" placeholder="홍길동 / OO 주식회사" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="pEmail">이메일</label>
+          <input class="form-input" id="pEmail" name="email" type="email" placeholder="example@company.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="pMsg">문의 내용</label>
+          <textarea class="form-textarea" id="pMsg" name="message" placeholder="제휴 목적과 간략한 내용을 적어주세요." required></textarea>
+        </div>
+        <button class="form-submit" id="partnerSubmitBtn" type="submit">문의 보내기</button>
+      </form>
+    </div>
+  </div>
+</div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeOnBg(event)">
@@ -1338,6 +1487,50 @@ async function fetchWeather() {
     weatherLoaded = true;
   } catch (e) {
     content.innerHTML = `<div class="weather-error">😅 날씨 정보를 불러오지 못했어요.<br>잠시 후 다시 눌러주세요.</div>`;
+  }
+}
+
+function openPartner() {
+  document.getElementById('partnerOverlay').classList.add('open');
+}
+function closePartner() {
+  document.getElementById('partnerOverlay').classList.remove('open');
+}
+function closePartnerOnBg(e) {
+  if (e.target === document.getElementById('partnerOverlay')) closePartner();
+}
+
+async function submitPartner(e) {
+  e.preventDefault();
+  const btn = document.getElementById('partnerSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = '전송 중...';
+
+  try {
+    const res = await fetch('https://formspree.io/f/xpqnyndb', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        name: document.getElementById('pName').value,
+        email: document.getElementById('pEmail').value,
+        message: document.getElementById('pMsg').value,
+      })
+    });
+
+    if (res.ok) {
+      document.getElementById('partnerFormWrap').innerHTML = `
+        <div class="form-success">
+          <div class="form-success-icon">✅</div>
+          <div class="form-success-title">문의가 접수됐어요!</div>
+          <div class="form-success-desc">빠른 시일 내에 입력하신 이메일로<br>연락드리겠습니다. 감사합니다 🙏</div>
+        </div>`;
+    } else {
+      throw new Error();
+    }
+  } catch {
+    btn.disabled = false;
+    btn.textContent = '문의 보내기';
+    alert('전송에 실패했어요. 잠시 후 다시 시도해주세요.');
   }
 }
 
