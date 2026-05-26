@@ -239,6 +239,13 @@
     }
     .slot-text {
       display: inline-block;
+      font-size: 4.2rem;
+      line-height: 1;
+      transition: filter 0.12s;
+    }
+    .slot-text.blurring {
+      filter: blur(3px);
+      opacity: 0.85;
     }
     .slot-text.landing {
       animation: slotLand 0.65s cubic-bezier(.17,.67,.35,1.45) forwards;
@@ -249,6 +256,16 @@
       68%  { transform: scale(1.14); }
       84%  { transform: scale(0.97); }
       100% { transform: scale(1); }
+    }
+    @keyframes slotShake {
+      0%,100% { transform: translateX(0) rotate(0); }
+      20%     { transform: translateX(-5px) rotate(-0.4deg); }
+      40%     { transform: translateX(5px)  rotate(0.4deg); }
+      60%     { transform: translateX(-3px) rotate(-0.2deg); }
+      80%     { transform: translateX(3px)  rotate(0.2deg); }
+    }
+    .slot-display.shaking {
+      animation: slotShake 0.18s ease-in-out;
     }
     .slot-result-badge {
       display: inline-flex;
@@ -1712,7 +1729,7 @@
     <!-- Slot -->
     <div class="slot-wrapper" id="slotWrapper">
       <div class="slot-display" id="slotDisplay">
-        <span class="slot-text" id="slotText">?</span>
+        <span class="slot-text" id="slotText">🎰</span>
       </div>
       <div id="resultBadge" style="margin-top:8px;display:none">
         <span class="slot-result-badge" id="badgeContent"></span>
@@ -2181,16 +2198,40 @@ function closeOnBg(e) {
 
 function startSlot() {
   const slotEl = document.getElementById('slotText');
+  const display = document.getElementById('slotDisplay');
   slotEl.className = 'slot-text';
+  display.classList.remove('shaking');
+
   const picked = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
-  let tick = 0;
-  let delay = 60;
+  // Pool of food emojis shown during spinning (no text)
+  const SPIN_POOL = ['🍱','🍜','🍣','🌮','🍕','🥘','🍛','🍔','🥗','🍤','🍲','🥩','🍝','🍙','🥟','🌯','🥙','🍘','🫕','🍖','🥚','🍞','🥣','🍿','🥮'];
+
+  let delay = 32;
 
   (function spin() {
-    slotEl.textContent = CATEGORIES[tick++ % CATEGORIES.length];
-    delay = Math.min(delay * 1.09, 290);
-    if (delay >= 290) {
-      slotEl.textContent = picked;
+    slotEl.textContent = SPIN_POOL[Math.floor(Math.random() * SPIN_POOL.length)];
+
+    // Phase 1 (≤70ms): blazing fast — barely see each emoji
+    if (delay < 70) {
+      delay *= 1.018;
+      slotEl.classList.add('blurring');
+    // Phase 2 (70~200ms): real deceleration — individual emojis start appearing
+    } else if (delay < 200) {
+      delay *= 1.072;
+      slotEl.classList.remove('blurring');
+    // Phase 3 (200ms+): dramatic crawl — each flip feels agonizing
+    } else {
+      delay *= 1.13;
+      slotEl.classList.remove('blurring');
+      display.classList.remove('shaking');
+      void display.offsetWidth;
+      display.classList.add('shaking');
+    }
+
+    if (delay >= 440) {
+      display.classList.remove('shaking');
+      slotEl.classList.remove('blurring');
+      slotEl.textContent = EMOJI_MAP[picked];
       slotEl.className = 'slot-text landing';
       currentFood = picked;
       triggerWinEffect();
@@ -2307,8 +2348,9 @@ function reroll() {
   document.getElementById('resultBadge').style.display = 'none';
   document.getElementById('badgeContent').classList.remove('pop');
   const slotEl = document.getElementById('slotText');
+  document.getElementById('slotDisplay').classList.remove('shaking');
   slotEl.className = 'slot-text';
-  slotEl.textContent = '?';
+  slotEl.textContent = '🎰';
   setTimeout(startSlot, 60);
 }
 
