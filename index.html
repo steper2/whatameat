@@ -2492,6 +2492,91 @@ const RECIPES = {
   ]
 };
 
+// 아침 전용 추가 레시피 (기존 RECIPES에 없는 항목)
+const MORNING_EXTRA = {
+  '일식': [
+    { name: '타마고야키', chef: '와타나베 이타루', rating: 4.7, icon: '🥚', time: '10분', difficulty: '보통',
+      ingredients: ['달걀 3개', '다시 2T', '미림 1T', '설탕 1t', '간장 1t', '식용유'],
+      steps: ['달걀을 풀고 다시·미림·설탕·간장과 섞는다', '팬을 달궈 기름을 얇게 두른다', '달걀물 1/3을 붓고 반숙될 때 돌돌 만다', '나머지 달걀물을 2회에 나눠 같은 방법으로 만다', '식혀서 먹기 좋게 썰어 완성'] }
+  ],
+  '중식': [
+    { name: '피단죽', chef: '왕샤오밍', rating: 4.6, icon: '🥣', time: '30분', difficulty: '쉬움',
+      ingredients: ['쌀 1컵', '피단 2개', '닭육수 4컵', '생강 3슬라이스', '소금', '참기름', '파'],
+      steps: ['쌀을 씻어 30분 불린다', '닭육수에 불린 쌀을 넣고 끓인다', '약불에서 20분 저으며 끓인다', '피단을 깍둑썰기하여 넣는다', '소금으로 간하고 파·참기름 올려 완성'] }
+  ],
+  '양식': [
+    { name: '버터 팬케이크', chef: '제이미 올리버', rating: 4.7, icon: '🥞', time: '20분', difficulty: '쉬움',
+      ingredients: ['밀가루 1컵', '달걀 1개', '우유 3/4컵', '베이킹파우더 1t', '설탕 1T', '버터 2T', '메이플 시럽'],
+      steps: ['밀가루·베이킹파우더·설탕·소금을 섞는다', '달걀·우유·녹인버터를 섞는다', '가루와 액체 재료를 가볍게 섞는다', '팬에 버터 두르고 반죽을 부어 양면 굽는다', '메이플 시럽·과일 올려 완성'] },
+    { name: '스크램블드 에그 토스트', chef: 'Gordon Ramsay', rating: 4.8, icon: '🍳', time: '10분', difficulty: '쉬움',
+      ingredients: ['달걀 3개', '버터 1T', '생크림 1T', '소금·후추', '식빵 2장', '체다치즈'],
+      steps: ['식빵을 토스터에 굽는다', '달걀을 풀고 생크림·소금·후추를 섞는다', '차가운 팬에 버터 넣고 달걀물을 붓는다', '약중불에서 천천히 저어 크리미하게 익힌다', '토스트 위에 올리고 치즈로 마무리'] }
+  ],
+  '분식': [
+    { name: '야채 김밥', chef: '백종원', rating: 4.6, icon: '🌯', time: '25분', difficulty: '쉬움',
+      ingredients: ['밥 2공기', '시금치 1줌', '당근 1/4개', '단무지 2줄', '계란 2개', '우엉조림', '김', '참기름', '소금'],
+      steps: ['밥에 참기름·소금 넣고 섞는다', '시금치·당근 각각 볶아 준비한다', '계란을 얇게 지단 부쳐 채 썬다', '김 위에 밥 펴고 재료 올려 단단히 만다', '참기름 바르고 먹기 좋게 썰어 완성'] }
+  ],
+  '태국식': [
+    { name: '카오톰 (태국식 죽)', chef: 'Bo Songvisava', rating: 4.6, icon: '🥣', time: '25분', difficulty: '쉬움',
+      ingredients: ['재스민 쌀 1컵', '닭육수 5컵', '생강 3슬라이스', '마늘 2쪽', '피시소스 1T', '파', '고수'],
+      steps: ['쌀을 씻어 닭육수에 넣고 끓인다', '생강·마늘을 넣는다', '약불에서 20분 저어가며 끓인다', '피시소스로 간을 맞춘다', '파·고수·라임즙 올려 완성'] }
+  ],
+  '인도식': [
+    { name: '이들리 & 삼발', chef: 'Sanjeev Kapoor', rating: 4.7, icon: '🫓', time: '하루(발효)', difficulty: '보통',
+      ingredients: ['우라드 달 1컵', '이들리 쌀 2컵', '소금', '삼발 소스', '코코넛 처트니'],
+      steps: ['달과 쌀을 따로 8시간 불린다', '따로 갈아서 섞고 8시간 발효시킨다', '소금을 넣고 이들리 틀에 붓는다', '찜기에서 12분 찐다', '삼발·코코넛 처트니와 함께 서빙'] },
+    { name: '마살라 도사', chef: 'Udupi 레스토랑', rating: 4.8, icon: '🥞', time: '하루(발효)', difficulty: '보통',
+      ingredients: ['우라드 달 1컵', '이들리 쌀 3컵', '감자 3개', '양파 1개', '머스터드 씨', '터메릭 1t', '그린칠리'],
+      steps: ['달·쌀을 갈아 8시간 발효시킨다', '감자를 삶아 향신료·양파와 볶아 속 재료를 만든다', '팬에 얇게 반죽을 펴 바삭하게 굽는다', '속 재료를 올리고 반으로 접는다', '코코넛 처트니·삼발과 함께 서빙'] }
+  ],
+  '멕시코식': [
+    { name: '부리또 브렉퍼스트', chef: 'Border Grill 레시피', rating: 4.7, icon: '🌯', time: '15분', difficulty: '쉬움',
+      ingredients: ['플라워 또르띠야 2장', '달걀 3개', '베이컨 3줄', '체다치즈', '살사', '아보카도', '사워크림'],
+      steps: ['베이컨을 바삭하게 굽는다', '달걀을 스크램블로 만든다', '또르띠야를 따뜻하게 데운다', '달걀·베이컨·치즈·살사·아보카도를 올린다', '단단히 말아 반으로 잘라 서빙'] },
+    { name: '칠라킬레스', chef: 'Enrique Olvera', rating: 4.7, icon: '🫔', time: '20분', difficulty: '쉬움',
+      ingredients: ['또르띠야 칩 200g', '살사 베르데 2컵', '달걀 2개', '사워크림', '치즈', '고수', '아보카도'],
+      steps: ['팬에 살사 베르데를 끓인다', '또르띠야 칩을 넣고 소스가 배도록 섞는다', '달걀 프라이를 만든다', '그릇에 칩을 담고 달걀을 올린다', '사워크림·치즈·고수·아보카도로 마무리'] }
+  ]
+};
+
+// 시간대별 레시피 매핑 (아침=가볍고 소화 쉬운 것, 점심=든든한 한 끼, 저녁=풍성한 저녁 요리)
+const RECIPES_MEAL = {
+  '아침': {
+    '한식':   [RECIPES['한식'][7], RECIPES['한식'][3], RECIPES['한식'][9]],
+    '일식':   [RECIPES['일식'][2], RECIPES['일식'][7], MORNING_EXTRA['일식'][0]],
+    '중식':   [RECIPES['중식'][6], RECIPES['중식'][9], MORNING_EXTRA['중식'][0]],
+    '양식':   [RECIPES['양식'][2], MORNING_EXTRA['양식'][0], MORNING_EXTRA['양식'][1]],
+    '분식':   [RECIPES['분식'][3], RECIPES['분식'][4], MORNING_EXTRA['분식'][0]],
+    '태국식': [MORNING_EXTRA['태국식'][0], RECIPES['태국식'][4], RECIPES['태국식'][7]],
+    '인도식': [MORNING_EXTRA['인도식'][0], MORNING_EXTRA['인도식'][1], RECIPES['인도식'][8]],
+    '베트남식': [RECIPES['베트남식'][0], RECIPES['베트남식'][2], RECIPES['베트남식'][5]],
+    '멕시코식': [MORNING_EXTRA['멕시코식'][0], MORNING_EXTRA['멕시코식'][1], RECIPES['멕시코식'][8]]
+  },
+  '점심': {
+    '한식':   [RECIPES['한식'][0], RECIPES['한식'][4], RECIPES['한식'][5]],
+    '일식':   [RECIPES['일식'][3], RECIPES['일식'][4], RECIPES['일식'][6]],
+    '중식':   [RECIPES['중식'][0], RECIPES['중식'][2], RECIPES['중식'][1]],
+    '양식':   [RECIPES['양식'][1], RECIPES['양식'][5], RECIPES['양식'][8]],
+    '분식':   [RECIPES['분식'][0], RECIPES['분식'][1], RECIPES['분식'][2]],
+    '태국식': [RECIPES['태국식'][0], RECIPES['태국식'][4], RECIPES['태국식'][5]],
+    '인도식': [RECIPES['인도식'][0], RECIPES['인도식'][1], RECIPES['인도식'][6]],
+    '베트남식': [RECIPES['베트남식'][1], RECIPES['베트남식'][8], RECIPES['베트남식'][7]],
+    '멕시코식': [RECIPES['멕시코식'][0], RECIPES['멕시코식'][2], RECIPES['멕시코식'][5]]
+  },
+  '저녁': {
+    '한식':   [RECIPES['한식'][6], RECIPES['한식'][8], RECIPES['한식'][2]],
+    '일식':   [RECIPES['일식'][0], RECIPES['일식'][8], RECIPES['일식'][9]],
+    '중식':   [RECIPES['중식'][7], RECIPES['중식'][8], RECIPES['중식'][3]],
+    '양식':   [RECIPES['양식'][0], RECIPES['양식'][6], RECIPES['양식'][7]],
+    '분식':   [RECIPES['분식'][5], RECIPES['분식'][7], RECIPES['분식'][9]],
+    '태국식': [RECIPES['태국식'][2], RECIPES['태국식'][3], RECIPES['태국식'][6]],
+    '인도식': [RECIPES['인도식'][2], RECIPES['인도식'][3], RECIPES['인도식'][4]],
+    '베트남식': [RECIPES['베트남식'][4], RECIPES['베트남식'][6], RECIPES['베트남식'][3]],
+    '멕시코식': [RECIPES['멕시코식'][3], RECIPES['멕시코식'][4], RECIPES['멕시코식'][7]]
+  }
+};
+
 let currentMeal = '';
 let currentType = '';
 let currentFood = '';
@@ -2625,7 +2710,7 @@ function showResult(food) {
         </div>
       </div>`;
   } else {
-    const list = RECIPES[food];
+    const list = (RECIPES_MEAL[currentMeal] && RECIPES_MEAL[currentMeal][food]) || RECIPES[food];
     body.innerHTML = `
       <div class="recipe-section">
         <h3>⭐ 유명 셰프 추천 레시피</h3>
